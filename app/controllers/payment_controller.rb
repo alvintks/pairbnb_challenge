@@ -14,7 +14,7 @@ class PaymentController < ApplicationController
     }
    )
     if result.success?
-      UserMailer.notify(current_user).deliver
+      UserMailer.notify(current_user).deliver_later
       redirect_to user_listings_path(current_user.id), :flash => { :success => "Transaction successful!" }
     else
       redirect_to user_listings_path(current_user.id), :flash => { :error => "Transaction failed. Please try again." }
