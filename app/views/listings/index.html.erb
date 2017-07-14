@@ -35,18 +35,18 @@
 <% if @listing.is_a? String %> 
     <%= @listing %>
   <% else %>
-  <tr>
-  <td>Property Name</td>
-  <td>Description</td>
-  <td>Price Per Night</td>
-  <br>
-  <% @listing.each do |list| %>
-  <td><%= list.property_name %> </td>
-  <td><%= list.description %></td>
-  <td><%= list.price_per_night %></td>
-  <td><%= link_to "edit", edit_user_listing_path(current_user.id, list.id)%></td>
-  <td><%= link_to 'delete', user_listing_path(current_user.id, list.id), method: :delete, data: { confirm: 'Are you sure?' } %></td><br>
-  </tr>
+    <tr>
+    <td>Property Name</td>
+    <td>Description</td>
+    <td>Price Per Night</td>
+    <br>
+    <% @listing.each do |list| %>
+    <td><%= list.property_name %> </td>
+    <td><%= list.description %></td>
+    <td><%= list.price_per_night %></td>
+    <td><%= link_to "edit", edit_user_listing_path(current_user.id, list.id)%></td>
+    <td><%= link_to 'delete', user_listing_path(current_user.id, list.id), method: :delete, data: { confirm: 'Are you sure?' } %></td><br>
+    </tr>
   <% end %>
 <% end %>
 
@@ -67,17 +67,17 @@
     <% else %>
   <td><%= "non-verified property" %></td>
       <% if current_user.superadmin? %>
-  <td>
-      <%= form_for [User.find(list.user_id), list],  method: :patch do |f| %>
+        <td>
+          <%= form_for [User.find(list.user_id), list],  method: :patch do |f| %>
 
-        <%= f.label :verification_status %>
-        <%= f.select :verification_status, options_for_select([["Not Verified", "not_verified"], ["Verified", "verified"]]) %>
-        <%= f.submit :submit %>
-      <% end %>
+            <%= f.label :verification_status %>
+            <%= f.select :verification_status, options_for_select([["Not Verified", "not_verified"], ["Verified", "verified"]]) %>
+            <%= f.submit :submit %>
+          <% end %>
+          <% end %>
   </td>
   <td><%= button_to("Check Availability", new_listing_reservation_path(list.id), method: :get) %></td>
   <br>
-      <% end %>
     <% end %>
   <% end %>
   </tr>
