@@ -15,4 +15,10 @@ class UsersController < Clearance::UsersController
       end
   end
 
+  def edit
+  end
+
+  def show
+  end
+
 end

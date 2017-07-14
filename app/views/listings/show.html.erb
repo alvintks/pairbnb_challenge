@@ -1,0 +1,9 @@
+<% @showlist.image.each do |x| %>
+    <p><%=image_tag x.url  %></p>
+    <% end %>
+<p><%= @showlist.property_name %></p>
+<p><%= @showlist.description %></p>
+<p><%= @showlist.price_per_night %></p>
+
+
+<%= link_to "back to user", user_listings_path(current_user.id)%>

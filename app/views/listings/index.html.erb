@@ -1,0 +1,89 @@
+<h1><%= current_user.email %></h1>
+
+<%= form_tag(user_listings_path, :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search Listings" %>
+    <%= submit_tag "Search", :name => nil %>
+<% end %>
+
+<% if @listing_search.blank? %>
+  <h4>There are no listings containing the term <%= params[:search] %>.</h4>
+<% else %>
+  <tr>
+  <% @listing_search.each do |t| %>
+    <td><%= t.property_name %></td>
+    <td><%= t.description %></td>
+    <td><%= t.price_per_night %></td>
+  </tr><br>
+  <% end %>
+<% end %>
+
+<%= link_to "Make a new listing", new_user_listing_path(current_user.id) %> 
+
+<p><b>Your reservations</b></p>
+  <%if @reservation.is_a? String %>
+    <%= @reservation %>
+  <% else %>
+    <% @reservation.each do |x| %> 
+    <% t = Listing.find(x.listing_id) %> 
+    <b><%= t.property_name %></b>
+    <%= x.start_date %>
+    <%= x.end_date %><br>
+    <% end %>
+  <% end %>
+
+<p><b>Your Listings</b></p>
+<% if @listing.is_a? String %> 
+    <%= @listing %>
+  <% else %>
+  <tr>
+  <td>Property Name</td>
+  <td>Description</td>
+  <td>Price Per Night</td>
+  <br>
+  <% @listing.each do |list| %>
+  <td><%= list.property_name %> </td>
+  <td><%= list.description %></td>
+  <td><%= list.price_per_night %></td>
+  <td><%= link_to "edit", edit_user_listing_path(current_user.id, list.id)%></td>
+  <td><%= link_to 'delete', user_listing_path(current_user.id, list.id), method: :delete, data: { confirm: 'Are you sure?' } %></td><br>
+  </tr>
+  <% end %>
+<% end %>
+
+<p><b>Available properties to rent!</b></p>
+  <tr>
+  <td>Property Name</td>
+  <td>Description</td>
+  <td>Price Per Night</td>
+  <td>Verification Status</td>
+  <br></tr>
+  <tr>
+  <% @full_listing.each do |list| %>
+  <td><%= link_to list.property_name, user_listing_path(list.user_id, list) %> </td>
+  <td><%= list.description %></td>
+  <td><%= list.price_per_night %></td>
+    <% if list.verified? %>
+  <td><%= "verified property" %></td>
+    <% else %>
+  <td><%= "non-verified property" %></td>
+      <% if current_user.superadmin? %>
+  <td>
+      <%= form_for [User.find(list.user_id), list],  method: :patch do |f| %>
+
+        <%= f.label :verification_status %>
+        <%= f.select :verification_status, options_for_select([["Not Verified", "not_verified"], ["Verified", "verified"]]) %>
+        <%= f.submit :submit %>
+      <% end %>
+  </td>
+  <td><%= button_to("Check Availability", new_listing_reservation_path(list.id), method: :get) %></td>
+  <br>
+      <% end %>
+    <% end %>
+  <% end %>
+  </tr>
+  <%= will_paginate @full_listing %>
+
+
+
+
+
