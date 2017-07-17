@@ -1,0 +1,21 @@
+<p>This is your current listing:</p>
+    <% @editlist.image.each do |x| %>
+    <%=image_tag x.thumb.url  %>
+    <% end %><br>
+    <%=@editlist.property_name %>
+    <%=@editlist.description %>
+    <%=@editlist.price_per_night %>
+
+<p> Edit to: </p>
+  <%= form_for [current_user, @editlist] do |form| %>
+    <%= render partial: '/listings/form', object: form %>
+    <% if form.object.image? %>
+      <% @editlist.image.each do |x| %>
+      <%= image_tag x.thumb.url %>
+      <% end %>
+      <%= form.label :remove_image %>
+      <%= form.check_box :remove_image %> 
+      
+    <% end %><br>
+     <%= form.submit %> 
+  <% end %>

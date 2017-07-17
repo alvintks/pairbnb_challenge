@@ -1,0 +1,22 @@
+<% if @errors.present? %>
+ <% @errors.each do |message| %>
+ <%= message %>
+ <% end %>
+<% end %>
+
+<p><%= @listing.property_name %></p>
+<p><%= @listing.description %></p>
+<p><%= @listing.price_per_night %></p>
+<p><%= @listing.verification_status %></p>
+
+<div>
+<%= form_for [@listing, @reservation] do |form| %>
+<%= form.label :start_date %>
+<%= form.date_field :start_date %>
+<%= form.label :end_date %>
+<%= form.date_field :end_date %>
+<%= form.submit %>
+<% end %>
+</div>
+
+<%= link_to "back to user", user_listings_path(current_user.id)%>
